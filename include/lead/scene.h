@@ -7,6 +7,7 @@
 class Scene: public LeadObject{
 public:
     Scene(const PropertyList &propList) {
+        m_sampleCount = propList.getInt("samples", 32);
     }
 
     virtual void activate() override { }
@@ -50,6 +51,7 @@ public:
 
 protected:
     std::vector<Shape *> m_shapes;
+    int m_sampleCount;
 };
 
 LEAD_REGISTER_CLASS(Scene, "scene")

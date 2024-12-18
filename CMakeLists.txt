@@ -21,6 +21,8 @@ set(LEAD_FILES
     include/lead/scene.h
     include/lead/shape.h
     include/lead/boundingbox.h
+    include/lead/integrator.h
+    include/lead/camera.h
 
     #Files
     src/main.cpp

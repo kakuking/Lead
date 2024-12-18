@@ -7,10 +7,12 @@
 class LeadObject {
 public:
     enum ObjectType {
-        LScene = 0,
-        LShape,
-        LCamera,
-        LIntegrator,
+        LScene = 0,     // Added Scene class
+        LShape,         // Added Shape Class
+        LCamera,        // Added Camera Class
+        LIntegrator,    // Added Integrator Class
+        LTexture,       
+        LTransform,
         LUnknown
     };
 

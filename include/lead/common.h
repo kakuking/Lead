@@ -11,8 +11,9 @@
 #include <glm/glm.hpp>
 #include <limits>
 
-// class Scene;
-// class Shape;
+class Scene;
+class Shape;
+class Sampler;
 
 #undef INFINITY
 #define INFINITY std::numeric_limits<float>::max()
