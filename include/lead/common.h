@@ -8,7 +8,7 @@
 #include <fstream>
 #include <vector>
 #include <tinyformat.h>
-#include <glm/glm.hpp>
+#include <memory>
 #include <limits>
 
 class Scene;
@@ -27,6 +27,10 @@ class Sampler;
 #define INV_FOURPI   0.07957747154594766788f
 #define SQRT_TWO     1.41421356237309504880f
 #define INV_SQRT_TWO 0.70710678118654752440f
+
+inline double degrees_to_radians(double degrees) {
+    return degrees * M_PI/180.0;
+}
 
 #include <lead/leadexception.h>
 #include <lead/proplist.h>

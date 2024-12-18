@@ -11,24 +11,29 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 
 set(LEAD_FILES 
     # Headers
+    include/lead/boundingbox.h
+    include/lead/camera.h
     include/lead/color.h
     include/lead/common.h
     include/lead/euclidean.h
+    include/lead/integrator.h
     include/lead/leadexception.h
     include/lead/object.h
     include/lead/parser.h
     include/lead/proplist.h
+    include/lead/render.h
+    include/lead/sampler.h
     include/lead/scene.h
     include/lead/shape.h
-    include/lead/boundingbox.h
-    include/lead/integrator.h
-    include/lead/camera.h
 
     #Files
     src/main.cpp
+
+    src/common.cpp
+    src/direct.cpp
     src/object.cpp
     src/sphere.cpp
-    src/common.cpp
+    src/independent.cpp
 )
 
 find_package(OpenVDB CONFIG REQUIRED)

@@ -11,6 +11,7 @@ public:
         LShape,         // Added Shape Class
         LCamera,        // Added Camera Class
         LIntegrator,    // Added Integrator Class
+        LSampler,       // Added Sampler Class
         LTexture,       
         LTransform,
         LUnknown
@@ -22,6 +23,7 @@ public:
             case ObjectType::LShape: return "shape";
             case ObjectType::LCamera: return "camera";
             case ObjectType::LIntegrator: return "integrator";
+            case ObjectType::LSampler: return "sampler";
             default: return "Unknown ObjectType";
         }
         return "Unknown ObjectType";
@@ -32,19 +34,20 @@ public:
         else if(inp.compare("shape") == 0) return ObjectType::LShape;
         else if(inp.compare("camera") == 0) return ObjectType::LCamera;
         else if(inp.compare("integrator") == 0) return ObjectType::LIntegrator;
+        else if(inp.compare("sampler") == 0) return ObjectType::LSampler;
 
         return ObjectType::LUnknown;
     }
 
     virtual ~LeadObject() = default;
 
-    virtual void activate() = 0;
+    virtual void activate() {};
 
     virtual ObjectType getClassType() const = 0;
 
     virtual std::string toString() const = 0;
 
-    virtual void addChild(LeadObject *obj) = 0;
+    virtual void addChild(LeadObject *obj) {}
 
     virtual void setId(std::string newId) { m_id = newId; }
     virtual std::string getId() { return m_id; }

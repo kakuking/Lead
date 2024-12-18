@@ -2,9 +2,15 @@
 
 #include <lead/common.h>
 
-class Color3f: public glm::vec3 {
+class Color3f {
 public:
-    using glm::vec3::vec;
+    float x, y, z;
+
+    Color3f() {}
+    Color3f(float a): x{a}, y{a}, z{a} {}
+    Color3f(const Color3f &o): x{o.x}, y{o.y}, z{o.z} {}
+    Color3f(float x, float y, float z): x{x}, y{y}, z{z} {}
+
 
     Color3f(std::vector<std::string> values) {
         if(values.size() < 1)
@@ -13,11 +19,9 @@ public:
         if(values.size() > 3)
             throw LeadException("Too many values provided for point!");
         
-        float x = values.size() > 0 ? std::stof(values[0]) : 0.0f;
-        float y = values.size() > 1 ? std::stof(values[1]) : 0.0f;
-        float z = values.size() > 2 ? std::stof(values[2]) : 0.0f;
-
-        *static_cast<glm::vec3*>(this) = glm::vec3(x, y, z);
+        x = values.size() > 0 ? std::stof(values[0]) : 0.0f;
+        y = values.size() > 1 ? std::stof(values[1]) : 0.0f;
+        z = values.size() > 2 ? std::stof(values[2]) : 0.0f;
     }
     
     std::string toString() const {

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scene>
+    <camera>
+        <point name="eye" value="0.0, 0.0, -5.0"/>
+    </camera>
+    <sampler type="independent"/>
     
+    <integrator type="direct"/>
     
     <shape type="sphere">
         <float name="radius" value="2.5"/>

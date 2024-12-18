@@ -3,12 +3,13 @@
 #include <lead/common.h>
 #include <lead/object.h>
 #include <lead/shape.h>
+#include <lead/integrator.h>
+#include <lead/camera.h>
+#include <lead/sampler.h>
 
 class Scene: public LeadObject{
 public:
-    Scene(const PropertyList &propList) {
-        m_sampleCount = propList.getInt("samples", 32);
-    }
+    Scene(const PropertyList &propList) { }
 
     virtual void activate() override { }
 
@@ -22,13 +23,17 @@ public:
                 break;
             
             case LCamera:
-                std::cout << "Adding camera to scene\n";
+                m_camera = static_cast<Camera *>(obj);
                 break;
             
             case LIntegrator:
-                std::cout << "Adding integrator to scene!\n";
+                m_integrator = static_cast<Integrator *>(obj);
                 break;
             
+            case LSampler:
+                m_sampler = static_cast<Sampler *>(obj);
+                break;
+
             default:
                 std::cout << tfm::format("Class %s cannot be added to a scene!\n", className);
                 break;
@@ -38,20 +43,37 @@ public:
     virtual LeadObject::ObjectType getClassType() const override { return LeadObject::LScene; }
 
     virtual std::string toString() const override {
-        std::string all_shapes = "\n";
+        std::string all_shapes = "";
 
         for(auto const& shape: m_shapes)
             all_shapes = all_shapes + shape->toString() + "\n";
         
         return tfm::format(
-            "Scene: [%s]",
+            "Scene: [\n"
+            "  %s\n"
+            "  Integrator: %s\n"
+            "  Sampler: %s\n"
+            "  %s"
+            "]"
+            ,
+            m_camera ? indent(m_camera->toString()): std::string("null"),
+            m_integrator ? indent(m_integrator->toString()): std::string("null"),
+            m_sampler ? indent(m_sampler->toString()): std::string("null"),
             indent(all_shapes)
         );
     }
 
+    const Integrator* getIntegrator() { return m_integrator; }
+
+    const Camera* getCamera() { return m_camera; }
+
+    Sampler* getSampler() { return m_sampler; }
+
 protected:
     std::vector<Shape *> m_shapes;
-    int m_sampleCount;
+    Integrator *m_integrator;
+    Camera *m_camera;
+    Sampler *m_sampler;
 };
 
 LEAD_REGISTER_CLASS(Scene, "scene")
