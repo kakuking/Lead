@@ -34,6 +34,9 @@ public:
 
         Scene *scene = (Scene *)(obj);
 
+        std::cout << "Finished parsing\n";
+        std::cout << scene->toString() << std::endl;
+
         return scene;
     }
     
@@ -42,7 +45,17 @@ public:
         if(node->type() != rapidxml::node_element)
             return nullptr;
         
-        std::string node_type(node->name());
+        std::string node_type(node->name());    // <scene/> --> scene
+
+        // Override type is set if there is a type attribute, in that case the constructor for the value of that attribute is called
+        // <scene/> ---------> scene
+        // <shape type="sphere"/> ------> sphere
+        std::string override_type = node_type;
+        for(rapidxml::xml_attribute<> *attr = node->first_attribute(); attr; attr = attr->next_attribute()){
+            std::string attr_name(attr->name());
+            if (attr_name.compare("type") == 0)
+                override_type = attr->value();
+        }
 
         // If it is a LeadObject
         LeadObject::ObjectType leadObjType = LeadObject::classNameToObjectType(node_type);
@@ -53,20 +66,21 @@ public:
 
             // Go through each child, if it is a child object it is appended to the vector, otherwise it is added to the current properties
             for(rapidxml::xml_node<> *child = node->first_node(); child; child = child->next_sibling()){
-                std::cout << "Going through child!\n";
                 LeadObject* childObject = traverseNode(child, &curPropList);
                 if(childObject != nullptr)
                     childObjects.push_back(childObject);
             }
 
-            LeadObject* curObj = LeadObjectFactory::createInstance(node_type, curPropList);
+            LeadObject* curObj = LeadObjectFactory::createInstance(override_type, curPropList);
 
             for(LeadObject* childObject: childObjects)
                 curObj->addChild(childObject);
             
-            for(rapidxml::xml_attribute<> *attr = node->first_attribute(); attr; attr = attr->next_attribute())
-                if (attr->name() == "name")
-                    curObj->setId(attr->value());            
+            for(rapidxml::xml_attribute<> *attr = node->first_attribute(); attr; attr = attr->next_attribute()){
+                std::string attr_name(attr->name());
+                if (attr_name.compare("name") == 0)
+                    curObj->setId(attr->value());
+            }
 
             return curObj;
         }

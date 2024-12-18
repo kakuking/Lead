@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene>
+    <float name="Wow" value="10."/>
+    
+    <shape type="sphere">
+        <float name="radius" value="2.5"/>
+        <point name="center" value="0, 0, 0"/>
+    </shape>
+    <shape type="sphere">
+        <float name="radius" value="1.5"/>
+        <point name="center" value="1, 1, 0"/>
+    </shape>
+    <shape type="sphere">
+        <float name="radius" value="2.9"/>
+        <point name="center" value="0, 9, 9"/>
+    </shape>
+</scene>

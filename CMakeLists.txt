@@ -20,10 +20,13 @@ set(LEAD_FILES
     include/lead/proplist.h
     include/lead/scene.h
     include/lead/shape.h
+    include/lead/boundingbox.h
 
     #Files
     src/main.cpp
     src/object.cpp
+    src/sphere.cpp
+    src/common.cpp
 )
 
 find_package(OpenVDB CONFIG REQUIRED)

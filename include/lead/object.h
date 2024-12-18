@@ -34,22 +34,15 @@ public:
         return ObjectType::LUnknown;
     }
 
-    LeadObject() {}
-    LeadObject(const PropertyList &propList) {
-        m_propList = propList;
-    }
-
     virtual ~LeadObject() = default;
 
-    virtual void activate() { throw LeadException("The activate function hasn't been implemented for this class!"); }
+    virtual void activate() = 0;
 
-    virtual ObjectType getClassType() const = 0;// { return ObjectType::LUnknown; };
+    virtual ObjectType getClassType() const = 0;
 
-    virtual std::string toString() const { return ""; };
+    virtual std::string toString() const = 0;
 
-    virtual void addChild(LeadObject *obj) {
-        throw LeadException("Add child was not implemented for this Object yet!");
-    }
+    virtual void addChild(LeadObject *obj) = 0;
 
     virtual void setId(std::string newId) { m_id = newId; }
     virtual std::string getId() { return m_id; }

@@ -2,13 +2,11 @@
 
 #include <lead/common.h>
 #include <lead/object.h>
-#include <iostream>
+#include <lead/shape.h>
 
 class Scene: public LeadObject{
 public:
     Scene(const PropertyList &propList) {
-        std::cout << "Printing proplist in Scene!\n";
-        std::cout << propList.toString();
     }
 
     virtual void activate() override { }
@@ -19,7 +17,7 @@ public:
 
         switch(classType){
             case LShape:
-                std::cout << "Adding shape to scene!\n";
+                m_shapes.push_back(static_cast<Shape *>(obj));
                 break;
             
             case LCamera:
@@ -37,6 +35,21 @@ public:
     }
 
     virtual LeadObject::ObjectType getClassType() const override { return LeadObject::LScene; }
+
+    virtual std::string toString() const override {
+        std::string all_shapes = "\n";
+
+        for(auto const& shape: m_shapes)
+            all_shapes = all_shapes + shape->toString() + "\n";
+        
+        return tfm::format(
+            "Scene: [%s]",
+            indent(all_shapes)
+        );
+    }
+
+protected:
+    std::vector<Shape *> m_shapes;
 };
 
 LEAD_REGISTER_CLASS(Scene, "scene")

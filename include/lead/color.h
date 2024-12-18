@@ -2,8 +2,6 @@
 
 #include <lead/common.h>
 
-
-
 class Color3f: public glm::vec3 {
 public:
     using glm::vec3::vec;

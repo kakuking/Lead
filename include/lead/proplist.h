@@ -1,13 +1,12 @@
 #pragma once
 
-#include <lead/euclidean.h>
+#include <lead/common.h>
 #include <lead/color.h>
+#include <lead/euclidean.h>
 
 #include <string>
 #include <vector>
 #include <map>
-
-
 
 class PropertyList {
 public:

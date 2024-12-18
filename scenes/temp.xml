@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scene>
-    <float name="Wow" value="10."/>
-    
-    <scene>
-        <int name="Damn" value="9"/>
-    </scene>
-</scene>
