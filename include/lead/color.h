@@ -34,6 +34,10 @@ public:
         return Color3f(x + o.x, y + o.y, z + o.z);
     }
 
+    Color3f operator-(const Color3f &o) {
+        return Color3f(x - o.x, y - o.y, z - o.z);
+    }
+
     Color3f operator/(const float &f) {
         return Color3f(x/f, y/f, z/f);
     }

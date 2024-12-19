@@ -14,7 +14,7 @@ public:
         m_bbox.expandBy(m_center - Point3f(m_radius));
     }
 
-    bool rayIntersect(const Ray3f &ray, float t, float u, float v) const override {
+    bool rayIntersect(const Ray3f &ray, float &t, float &u, float &v) const override {
         // Solution of the equation d2t2 + 2*t*d*(o-c) + c2 + o2 -2*o*c - r2 = 0;
         float dSqr = ray.d.dot(ray.d);
         float oSqr = ray.o.dot(ray.o);
@@ -93,7 +93,20 @@ public:
     }
 
     void setHitInformation(const Ray3f &ray, Intersection &its) const override {
+        float t, u, v;
 
+        rayIntersect(ray, t, u, v);
+
+        its.p = ray.at(t);
+
+        Normal3f n((its.p - m_center).normalized());
+        Frame localFrame(n);
+        
+        its.n = n;
+        its.t = t;
+        its.uv = Point2f(0, 0);
+        its.geoFrame = localFrame;
+        its.shFrame = localFrame;
     }
 
     std::string toString() const override {

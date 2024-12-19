@@ -25,6 +25,18 @@ public:
         return false;
     }
 
+    bool rayIntersect(const Ray3f &ray, Intersection &its) const {
+        for(const Shape* shape: m_shapes) {
+            float t, u, v;
+            if(shape->rayIntersect(ray, t, u, v)) {
+                shape->setHitInformation(ray, its);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     virtual void addChild(LeadObject *obj) override {
         LeadObject::ObjectType classType = obj->getClassType();
         std::string className = obj->objectTypeToClassName(classType);

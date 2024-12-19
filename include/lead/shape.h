@@ -2,6 +2,7 @@
 
 #include <lead/common.h>
 #include <lead/object.h>
+#include <lead/frame.h>
 #include <lead/boundingBox.h>
 
 LEAD_NAMESPACE_BEGIN
@@ -13,6 +14,11 @@ struct Intersection {
     Vector3f n;
     // UV coordinates
     Point2f uv;
+    // time of intersection
+    float t;
+    // Frame at point
+    Frame geoFrame;
+    Frame shFrame;
 
     std::string toString() {
         return tfm::format(
@@ -28,7 +34,7 @@ struct Intersection {
 
 class Shape: public LeadObject {
 public:
-    virtual bool rayIntersect(const Ray3f &ray, float t, float u, float v) const = 0;
+    virtual bool rayIntersect(const Ray3f &ray, float &t, float &u, float &v) const = 0;
 
     virtual void setHitInformation(const Ray3f &ray, Intersection &its) const = 0;
 

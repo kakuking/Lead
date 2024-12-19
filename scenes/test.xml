@@ -4,20 +4,17 @@
         <point name="eye" value="0.0, 0.0, -5.0"/>
         <point name="size" value="800, 600, 0"/>
     </camera>
-    <sampler type="independent"/>
+    <sampler type="independent">
+        <int name="sampleCount" value="15"/>
+    </sampler>
     
-    <integrator type="direct"/>
+    <integrator type="binary">
+        <color name="active" value="0.7, 0.2, 0.7"/>
+        <color name="bg" value="0.7, 0.2, 0.0"/>
+    </integrator>
     
     <shape type="sphere">
         <float name="radius" value="0.5"/>
         <point name="center" value="-0.5, 0.5, 0.5"/>
     </shape>
-    <!-- <shape type="sphere">
-        <float name="radius" value="1.5"/>
-        <point name="center" value="1, 1, 0"/>
-    </shape>
-    <shape type="sphere">
-        <float name="radius" value="2.9"/>
-        <point name="center" value="0, 9, 9"/>
-    </shape> -->
 </scene>

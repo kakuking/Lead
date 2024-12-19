@@ -33,27 +33,20 @@ public:
     }
 
     void render(const std::string& filename) {
-        std::cout << "Render function\n";
         Point2f outputSize = m_camera->getOutputSize();
-        std::cout << tfm::format("Output size: %s\n", outputSize.toString());
 
         m_image->resize(outputSize.x() * outputSize.y());
         m_imf_image->resize(outputSize.x() * outputSize.y());
 
-        std::cout << "About to get number of samples\n";
         float num_samples = (float)m_sampler->getSampleCount();
         
-        std::cout << "About to render\n";
-
         for (size_t i = 0; i < outputSize.x(); i++) {
         for (size_t j = 0; j < outputSize.y(); j++) {
         for (size_t k = 0; k < num_samples; k++) {
             int idx = (int)outputSize.x() * j + i;
-            Ray3f ray = m_camera->sampleRay(Point2f(i, j));
+            Ray3f ray = m_camera->sampleRay(Point2f(i, j), m_sampler->next2D());
             (*m_image)[idx] += m_integrator->Li(m_scene, m_sampler, ray);
         }}}
-
-        std::cout << "About to divide\n";
 
         for (size_t i = 0; i < m_image->size(); i++) {
             (*m_image)[i] /= num_samples;
@@ -61,9 +54,6 @@ public:
             (*m_imf_image)[i] = Imf::Rgba((*m_image)[i].x, (*m_image)[i].y, (*m_image)[i].z, 1.f);
         }
         
-
-        std::cout << "Writing to file\n";
-
         writeToFile(filename, (int)outputSize.x(), (int)outputSize.y());
     }
 

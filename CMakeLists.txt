@@ -31,7 +31,8 @@ set(LEAD_FILES
     
     src/camera.cpp
     src/common.cpp
-    src/direct.cpp
+    src/integrator_binary.cpp
+    src/integrator_normal.cpp
     src/object.cpp
     src/scene.cpp
     src/sphere.cpp
