@@ -2,21 +2,22 @@
 <scene>
     <camera>
         <point name="eye" value="0.0, 0.0, -5.0"/>
+        <point name="size" value="800, 600, 0"/>
     </camera>
     <sampler type="independent"/>
     
     <integrator type="direct"/>
     
     <shape type="sphere">
-        <float name="radius" value="2.5"/>
-        <point name="center" value="0, 0, 0"/>
+        <float name="radius" value="0.5"/>
+        <point name="center" value="-0.5, 0.5, 0.5"/>
     </shape>
-    <shape type="sphere">
+    <!-- <shape type="sphere">
         <float name="radius" value="1.5"/>
         <point name="center" value="1, 1, 0"/>
     </shape>
     <shape type="sphere">
         <float name="radius" value="2.9"/>
         <point name="center" value="0, 9, 9"/>
-    </shape>
+    </shape> -->
 </scene>

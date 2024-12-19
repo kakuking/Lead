@@ -28,19 +28,22 @@ set(LEAD_FILES
 
     #Files
     src/main.cpp
-
+    
+    src/camera.cpp
     src/common.cpp
     src/direct.cpp
     src/object.cpp
+    src/scene.cpp
     src/sphere.cpp
     src/independent.cpp
 )
 
 find_package(OpenVDB CONFIG REQUIRED)
+find_package(OpenEXR CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 
 add_executable(Lead ${LEAD_FILES})
 
-target_link_libraries(Lead PRIVATE OpenVDB::openvdb glm::glm)
+target_link_libraries(Lead PRIVATE OpenVDB::openvdb OpenEXR::OpenEXR glm::glm)
 target_include_directories(Lead PRIVATE ${CMAKE_SOURCE_DIR}/include ${RAPIDXML_INCLUDE_DIRS})

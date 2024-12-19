@@ -2,8 +2,9 @@
 
 #include <lead/common.h>
 #include <lead/shape.h>
+#include <lead/euclidean.h>
 
-#include <algorithm>
+LEAD_NAMESPACE_BEGIN
 
 class BoundingBox {
 public:
@@ -11,17 +12,25 @@ public:
     BoundingBox(Point3f ll, Point3f ur): lowerLeft{ll}, upperRight{ur} {}
 
     void expandBy(const Point3f newPt) {
-        if(lowerLeft.x > newPt.x) lowerLeft.x = newPt.x;
-        if(lowerLeft.y > newPt.y) lowerLeft.y = newPt.y;
-        if(lowerLeft.z > newPt.z) lowerLeft.z = newPt.z;
+        if(lowerLeft.x() > newPt.x()) lowerLeft.x() = newPt.x();
+        if(lowerLeft.y() > newPt.y()) lowerLeft.y() = newPt.y();
+        if(lowerLeft.z() > newPt.z()) lowerLeft.z() = newPt.z();
 
-        if(upperRight.x < newPt.x) upperRight.x = newPt.x;
-        if(upperRight.y < newPt.y) upperRight.y = newPt.y;
-        if(upperRight.z < newPt.z) upperRight.z = newPt.z;
+        if(upperRight.x() < newPt.x()) upperRight.x() = newPt.x();
+        if(upperRight.y() < newPt.y()) upperRight.y() = newPt.y();
+        if(upperRight.z() < newPt.z()) upperRight.z() = newPt.z();
+    }
+
+    bool isInBounds(const Point3f &o) const {
+        if(o.x() < lowerLeft.x() || o.x() > upperRight.x()) return false;
+        if(o.y() < lowerLeft.y() || o.y() > upperRight.y()) return false;
+        if(o.z() < lowerLeft.z() || o.z() > upperRight.z()) return false;
+
+        return true;
     }
 
     bool rayIntersect(const Ray3f &ray) const {
-        if (ray.o >= lowerLeft && ray.o <= upperRight)
+        if (isInBounds(ray.o))
             return true;
 
         float tmin = ray.minT;
@@ -75,7 +84,7 @@ public:
         
         Point3f point = ray.at(t);
 
-        if(point <= upperRight && point >= lowerLeft)
+        if(isInBounds(point))
             return true;
         
         return false;
@@ -85,3 +94,5 @@ public:
 protected:
     Point3f lowerLeft, upperRight;
 };
+
+LEAD_NAMESPACE_END

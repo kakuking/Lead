@@ -4,6 +4,7 @@
 #include <lead/object.h>
 #include <lead/boundingBox.h>
 
+LEAD_NAMESPACE_BEGIN
 // To pass information of intersection back and forth
 struct Intersection {
     // Point of intersection
@@ -37,7 +38,11 @@ public:
         LeadObject::ObjectType classType = obj->getClassType();
         std::string className = obj->objectTypeToClassName(classType);
 
-        std::cout << tfm::format("Class %s cannot be added to this shape!\n", className);
+        switch(classType){
+            default:
+                std::cout << tfm::format("Class %s cannot be added to a scene!\n", className);
+                break;
+        }
     }
 
     virtual void activate() override {};
@@ -47,3 +52,5 @@ public:
 protected:
     BoundingBox m_bbox;
 };
+
+LEAD_NAMESPACE_END

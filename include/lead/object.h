@@ -1,9 +1,12 @@
 #pragma once
 
+#include <lead/common.h>
 #include <lead/proplist.h>
+#include <lead/leadexception.h>
 
 #include <functional>
 
+LEAD_NAMESPACE_BEGIN
 class LeadObject {
 public:
     enum ObjectType {
@@ -12,8 +15,8 @@ public:
         LCamera,        // Added Camera Class
         LIntegrator,    // Added Integrator Class
         LSampler,       // Added Sampler Class
+        LTransform,     // Added Transform Class
         LTexture,       
-        LTransform,
         LUnknown
     };
 
@@ -100,3 +103,5 @@ private:
             LeadObjectFactory::registerClass(name, cls ##_## T ##_create); \
         } \
     } cls ## T ##__LEAD_;
+
+LEAD_NAMESPACE_END

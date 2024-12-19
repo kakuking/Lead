@@ -1,12 +1,13 @@
 #pragma once
 
-#include <lead/scene.h>
 #include <lead/common.h>
+#include <lead/scene.h>
 #include <lead/object.h>
+#include <lead/leadexception.h>
 
 #include <rapidxml/rapidxml.hpp>
 
-
+LEAD_NAMESPACE_BEGIN
 
 class Parser{
 public:
@@ -35,7 +36,6 @@ public:
         Scene *scene = (Scene *)(obj);
 
         std::cout << "Finished parsing\n";
-        std::cout << scene->toString() << std::endl;
 
         return scene;
     }
@@ -86,6 +86,8 @@ public:
         }
 
         // Otherwise, process a whatever and add to the propList
+        bool isPropertyTransform = node_type.compare("scale") == 0 ||  node_type.compare("rotate") == 0 || node_type.compare("translate") == 0;
+
         std::string propKey, propValue;
         bool setKey = false, setVal = false;
         for(rapidxml::xml_attribute<> *attr = node->first_attribute(); attr; attr = attr->next_attribute()){
@@ -102,7 +104,7 @@ public:
             }
         }
 
-        if(!(setKey & setVal))
+        if(!isPropertyTransform && !(setKey & setVal))
             throw LeadException(tfm::format("Attribute %s does not have name/value!", node_type));
 
         PropertyList::PropertyType pType = PropertyList::classNameToPropertyType(node_type);
@@ -120,12 +122,12 @@ public:
             
             case PropertyList::PropertyType::LPoint:
                 parentPropList->setPoint(propKey,
-                    Point3f(parseCommaSeparated(propValue))
+                    toPoint3f(parseCommaSeparated(propValue))
                 );
                 break;
             case PropertyList::PropertyType::LVector:
                 parentPropList->setVector(propKey,
-                    Vector3f(parseCommaSeparated(propValue))
+                    toVector3f(parseCommaSeparated(propValue))
                 );
                 break;
             case PropertyList::PropertyType::LColor:
@@ -145,6 +147,34 @@ public:
         return nullptr;
     }
 
+    Vector3f toVector3f(std::vector<std::string> values) const {
+        if(values.size() < 1)
+            throw LeadException("Too few values provided for vector!");
+
+        if(values.size() > 3)
+            throw LeadException("Too many values provided for vector!");
+        
+        float x = values.size() > 0 ? std::stof(values[0]) : 0.0f;
+        float y = values.size() > 1 ? std::stof(values[1]) : 0.0f;
+        float z = values.size() > 2 ? std::stof(values[2]) : 0.0f;
+
+        return Vector3f(x, y, z);
+    }
+
+    Point3f toPoint3f(std::vector<std::string> values) const {
+        if(values.size() < 1)
+            throw LeadException("Too few values provided for vector!");
+
+        if(values.size() > 3)
+            throw LeadException("Too many values provided for vector!");
+        
+        float x = values.size() > 0 ? std::stof(values[0]) : 0.0f;
+        float y = values.size() > 1 ? std::stof(values[1]) : 0.0f;
+        float z = values.size() > 2 ? std::stof(values[2]) : 0.0f;
+
+        return Point3f(x, y, z);
+    }
+
     std::vector<std::string> parseCommaSeparated(std::string value) const {
         std::vector<std::string> v;
         std::stringstream ss(value);
@@ -159,3 +189,5 @@ public:
     }
 };
 
+
+LEAD_NAMESPACE_END

@@ -1,7 +1,10 @@
 #pragma once
+
 #include <lead/common.h>
 #include <lead/object.h>
-#include <lead/render.h>
+#include <lead/block.h>
+
+LEAD_NAMESPACE_BEGIN
 
 class Sampler: public LeadObject {
 public:
@@ -19,6 +22,10 @@ public:
 
     virtual ObjectType getClassType() const override { return ObjectType::LSampler; }
 
+    virtual int getSampleCount() { return m_sampleCount; }
+
 protected:
     int m_sampleCount;
 };
+
+LEAD_NAMESPACE_END

@@ -2,12 +2,16 @@
 
 #include <lead/common.h>
 #include <lead/object.h>
+#include <lead/proplist.h>
+#include <lead/euclidean.h>
 
+
+LEAD_NAMESPACE_BEGIN
 class Camera: public LeadObject {
 public:
     Camera(const PropertyList &propList) {
         Point3f tempSize = propList.getPoint("size", Point3f(800, 600, 0));
-        m_outputSize = Point2f(tempSize.x, tempSize.y);
+        m_outputSize = Point2f(tempSize.x(), tempSize.y());
 
         m_FOV = propList.getFloat("FOV", 20.f);
         m_focalLength = propList.getFloat("focalLength", 10.f);
@@ -23,24 +27,25 @@ public:
         float theta = degrees_to_radians(m_FOV);
         float h = std::tan(theta/2);
         float viewport_height = 2 * h * m_focalLength;
-        float viewport_width = viewport_height * m_outputSize.x / m_outputSize.y;
+        float viewport_width = viewport_height * m_outputSize.x() / m_outputSize.y();
 
         Vector3f viewport_u = viewport_width * u;
         Vector3f viewport_v = viewport_height * v;
+        m_pixeldelta_u = viewport_u / m_outputSize.x();
+        m_pixeldelta_v = viewport_v / m_outputSize.y();
 
-        m_pixeldelta_u = viewport_u / m_outputSize.x;
-        m_pixeldelta_v = viewport_v / m_outputSize.y;
-
-        m_loc_00 = m_eye - w * m_focalLength - 0.5f * viewport_u - 0.5f * viewport_v;
+        Point3f viewport_upper_left = m_eye - w * m_focalLength - 0.5f * viewport_u - 0.5f * viewport_v;
+        m_loc_00 = viewport_upper_left + 0.5 * (m_pixeldelta_u + m_pixeldelta_v);
     }
 
     // Sampled position is int of pixel indecis, x and y
     virtual Ray3f sampleRay(const Point2f sampledPosition) const {
-        Point3f on_plane = m_loc_00 + m_pixeldelta_u * sampledPosition.x + m_pixeldelta_v * sampledPosition.y;
+        Point3f on_plane = m_loc_00 + m_pixeldelta_u * sampledPosition.x() + m_pixeldelta_v * sampledPosition.y();
 
-        Vector3f dir = on_plane - m_eye;
+        Vector3f dir = (on_plane - m_eye).normalized();
+        Ray3f ret(m_eye, dir);
 
-        return Ray3f(m_eye, dir);
+        return ret;
     }
 
     virtual LeadObject::ObjectType getClassType() const override { return LeadObject::LCamera; }
@@ -64,6 +69,8 @@ public:
         );
     }
 
+    Point2f getOutputSize() const { return m_outputSize; }
+
 protected:
     Point2f m_outputSize;
     Vector3f m_pixeldelta_u, m_pixeldelta_v;
@@ -72,11 +79,9 @@ protected:
     float m_FOV;
     float m_focalLength;
 
-
     Point3f m_eye, m_lookat;
     Vector3f m_up;
 
     Vector3f u, v, w;
 };
-
-LEAD_REGISTER_CLASS(Camera, "camera")
+LEAD_NAMESPACE_END

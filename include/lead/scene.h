@@ -7,11 +7,23 @@
 #include <lead/camera.h>
 #include <lead/sampler.h>
 
+LEAD_NAMESPACE_BEGIN
+
 class Scene: public LeadObject{
 public:
     Scene(const PropertyList &propList) { }
 
     virtual void activate() override { }
+
+    bool rayIntersect(const Ray3f &ray) const {
+        for(const Shape* shape: m_shapes) {
+            float t, u, v;
+            if(shape->rayIntersect(ray, t, u, v))
+                return true;
+        }
+
+        return false;
+    }
 
     virtual void addChild(LeadObject *obj) override {
         LeadObject::ObjectType classType = obj->getClassType();
@@ -63,11 +75,11 @@ public:
         );
     }
 
-    const Integrator* getIntegrator() { return m_integrator; }
+    const Integrator* getIntegrator() const { return m_integrator; }
 
-    const Camera* getCamera() { return m_camera; }
+    const Camera* getCamera() const { return m_camera; }
 
-    Sampler* getSampler() { return m_sampler; }
+    Sampler* getSampler() const { return m_sampler; }
 
 protected:
     std::vector<Shape *> m_shapes;
@@ -76,4 +88,4 @@ protected:
     Sampler *m_sampler;
 };
 
-LEAD_REGISTER_CLASS(Scene, "scene")
+LEAD_NAMESPACE_END

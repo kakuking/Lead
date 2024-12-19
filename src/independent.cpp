@@ -1,8 +1,8 @@
 #include <lead/common.h>
 #include <lead/sampler.h>
-#include <lead/render.h>
 #include <pcg32.h>
 
+LEAD_NAMESPACE_BEGIN
 class Independent: public Sampler {
 public:
     Independent() {}
@@ -48,7 +48,12 @@ public:
     }
 
     virtual std::string toString() const {
-        return "Independent[]";
+        return tfm::format(
+            "IndependentSampler[\n"
+            "  Sample Count: %d\n"
+            "]",
+            m_sampleCount
+            );
     }
 
 protected:
@@ -56,3 +61,4 @@ protected:
 };
 
 LEAD_REGISTER_CLASS(Independent, "independent")
+LEAD_NAMESPACE_END

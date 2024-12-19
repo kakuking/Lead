@@ -1,5 +1,7 @@
 #include <lead/common.h>
 
+LEAD_NAMESPACE_BEGIN
+
 std::string indent(const std::string &string, int amount) {
     /* This could probably be done faster (it's not
        really speed-critical though) */
@@ -17,3 +19,5 @@ std::string indent(const std::string &string, int amount) {
     }
     return oss.str();
 }
+
+LEAD_NAMESPACE_END

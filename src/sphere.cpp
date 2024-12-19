@@ -2,6 +2,8 @@
 #include <lead/euclidean.h>
 #include <lead/shape.h>
 
+LEAD_NAMESPACE_BEGIN
+
 class Sphere: public Shape {
 public:
     Sphere(const PropertyList &propList) {
@@ -62,7 +64,7 @@ public:
         p = p - m_center;
 
         // Corner case of 0, 0
-        if(p.x == 0 && p.y == 0){
+        if(p.x() == 0 && p.y() == 0){
             u = 0;
             v = 0;
 
@@ -76,9 +78,9 @@ public:
     }
 
     void calculateUV(float &u, float &v, Point3f p) const {
-        float theta = atan2f(p.x, p.y);
+        float theta = atan2f(p.x(), p.y());
         float length = sqrt(p.dot(p));
-        float psi = acosf(p.z/length);
+        float psi = acosf(p.z()/length);
 
         // Shift Theta
         theta = theta + M_PI;
@@ -111,3 +113,4 @@ protected:
 };
 
 LEAD_REGISTER_CLASS(Sphere, "sphere")
+LEAD_NAMESPACE_END

@@ -3,10 +3,9 @@
 #include <lead/common.h>
 #include <lead/color.h>
 #include <lead/euclidean.h>
+#include <lead/leadexception.h>
 
-#include <string>
-#include <vector>
-#include <map>
+LEAD_NAMESPACE_BEGIN
 
 class PropertyList {
 public:
@@ -17,28 +16,37 @@ public:
         LVector,
         LColor,
         LString,
+        LScale,
+        LRotate,
+        LTranslate,
         LUnkown
     };
 
     static PropertyType classNameToPropertyType(std::string key) {
-        if(key.compare("float") == 0)    return LFloat;
-        if(key.compare("int") == 0)      return LInt;
-        if(key.compare("point") == 0)    return LPoint;
-        if(key.compare("vector") == 0)   return LVector;
-        if(key.compare("color") == 0)    return LColor;
-        if(key.compare("string") == 0)   return LString;
+        if(key.compare("float") == 0)       return LFloat;
+        if(key.compare("int") == 0)         return LInt;
+        if(key.compare("point") == 0)       return LPoint;
+        if(key.compare("vector") == 0)      return LVector;
+        if(key.compare("color") == 0)       return LColor;
+        if(key.compare("string") == 0)      return LString;
+        if(key.compare("scale") == 0)       return LScale;
+        if(key.compare("rotate") == 0)      return LRotate;
+        if(key.compare("translate") == 0)   return LTranslate;
 
         return PropertyType::LUnkown;
     }
 
     static std::string propertyTypeToClassName(PropertyType value) {
         switch (value) {
-        case LFloat:    return "float";
-        case LInt:      return "int";
-        case LPoint:    return "point";
-        case LVector:   return "vector";
-        case LColor:    return "color";
-        case LString:   return "string";        
+        case LFloat:        return "float";
+        case LInt:          return "int";
+        case LPoint:        return "point";
+        case LVector:       return "vector";
+        case LColor:        return "color";
+        case LString:       return "string";        
+        case LScale:        return "scale";        
+        case LRotate:       return "rotate";        
+        case LTranslate:    return "translate";        
         }
 
         return "Unknown PropertyType";
@@ -111,3 +119,5 @@ protected:
     std::map<std::string, std::string> strings;
 };
 
+
+LEAD_NAMESPACE_END

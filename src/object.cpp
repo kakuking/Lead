@@ -1,6 +1,8 @@
 #include <lead/object.h>
 #include <lead/color.h>
 
+LEAD_NAMESPACE_BEGIN
+
 std::map<std::string, LeadObjectFactory::Constructor> *LeadObjectFactory::m_constructors = nullptr;
 
 void LeadObjectFactory::registerClass(const std::string &name, const Constructor &constructor){
@@ -9,3 +11,5 @@ void LeadObjectFactory::registerClass(const std::string &name, const Constructor
     
     (*m_constructors)[name] = constructor;
 }
+
+LEAD_NAMESPACE_END

@@ -1,9 +1,10 @@
 #pragma once
 
-#include <lead/common.h>
+#include <string>
+#include <exception>
 
-class LeadException: public std::exception
-{
+LEAD_NAMESPACE_BEGIN
+class LeadException: public std::exception {
 public:
     LeadException(std::string what): whatTf{what} {}
 
@@ -16,3 +17,4 @@ protected:
     std::string whatTf;
 };
 
+LEAD_NAMESPACE_END
