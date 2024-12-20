@@ -27,6 +27,7 @@ public:
             case ObjectType::LCamera: return "camera";
             case ObjectType::LIntegrator: return "integrator";
             case ObjectType::LSampler: return "sampler";
+            case ObjectType::LTransform: return "transform";
             default: return "Unknown ObjectType";
         }
         return "Unknown ObjectType";
@@ -38,6 +39,7 @@ public:
         else if(inp.compare("camera") == 0) return ObjectType::LCamera;
         else if(inp.compare("integrator") == 0) return ObjectType::LIntegrator;
         else if(inp.compare("sampler") == 0) return ObjectType::LSampler;
+        else if(inp.compare("transform") == 0) return ObjectType::LTransform;
 
         return ObjectType::LUnknown;
     }

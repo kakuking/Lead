@@ -4,6 +4,7 @@
 #include <lead/object.h>
 #include <lead/frame.h>
 #include <lead/boundingBox.h>
+#include <lead/transform.h>
 
 LEAD_NAMESPACE_BEGIN
 // To pass information of intersection back and forth
@@ -45,8 +46,13 @@ public:
         std::string className = obj->objectTypeToClassName(classType);
 
         switch(classType){
+            case LeadObject::ObjectType::LTransform:
+                m_transform = *(static_cast<Transform *>(obj));
+                m_invTransform = m_transform.getInverse();
+                break;
+
             default:
-                std::cout << tfm::format("Class %s cannot be added to a scene!\n", className);
+                std::cout << tfm::format("Class %s cannot be added to a shape!\n", className);
                 break;
         }
     }
@@ -56,6 +62,7 @@ public:
     BoundingBox getBoundingBox() const { return m_bbox; }
 
 protected:
+    Transform m_transform, m_invTransform;
     BoundingBox m_bbox;
 };
 

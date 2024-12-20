@@ -51,11 +51,8 @@ public:
         // <scene/> ---------> scene
         // <shape type="sphere"/> ------> sphere
         std::string override_type = node_type;
-        for(rapidxml::xml_attribute<> *attr = node->first_attribute(); attr; attr = attr->next_attribute()){
-            std::string attr_name(attr->name());
-            if (attr_name.compare("type") == 0)
-                override_type = attr->value();
-        }
+        getAttr(node, "type", override_type);
+
 
         // If it is a LeadObject
         LeadObject::ObjectType leadObjType = LeadObject::classNameToObjectType(node_type);
@@ -75,12 +72,10 @@ public:
 
             for(LeadObject* childObject: childObjects)
                 curObj->addChild(childObject);
-            
-            for(rapidxml::xml_attribute<> *attr = node->first_attribute(); attr; attr = attr->next_attribute()){
-                std::string attr_name(attr->name());
-                if (attr_name.compare("name") == 0)
-                    curObj->setId(attr->value());
-            }
+
+            std::string objName;
+            if(getAttr(node, "name", objName))
+                curObj->setId(objName);
 
             return curObj;
         }
@@ -90,19 +85,9 @@ public:
 
         std::string propKey, propValue;
         bool setKey = false, setVal = false;
-        for(rapidxml::xml_attribute<> *attr = node->first_attribute(); attr; attr = attr->next_attribute()){
-            std::string attr_name(attr->name());
-            std::string attr_val(attr->value());
-            if (attr_name.compare("name") == 0){
-                propKey = attr_val; 
-                setKey = true;
-            }
-            
-            if (attr_name.compare("value") == 0){
-                propValue = attr_val;
-                setVal = true;
-            }
-        }
+
+        setKey = getAttr(node, "name", propKey);
+        setVal = getAttr(node, "value", propValue);
 
         if(!isPropertyTransform && !(setKey & setVal))
             throw LeadException(tfm::format("Attribute %s does not have name/value!", node_type));
@@ -110,7 +95,8 @@ public:
         PropertyList::PropertyType pType = PropertyList::classNameToPropertyType(node_type);
         if(pType == PropertyList::PropertyType::LUnkown)
             throw LeadException("Unknown property type found");
-        
+
+        std::string angle, axis;    // For rotation
         switch (pType){
             case PropertyList::PropertyType::LFloat:
                 parentPropList->setFloat(propKey, std::stof(propValue));
@@ -138,6 +124,23 @@ public:
             case PropertyList::PropertyType::LString:
                 parentPropList->setString(propKey, propValue);
                 break;
+            case PropertyList::PropertyType::LScale:
+                parentPropList->setScale(
+                    toVector3f(parseCommaSeparated(propValue))
+                );
+                break;
+            case PropertyList::PropertyType::LTranslate:
+                parentPropList->setTranslate(
+                    toVector3f(parseCommaSeparated(propValue))
+                );
+                break;
+            case PropertyList::PropertyType::LRotate:
+                getAttr(node, "angle", angle);
+                getAttr(node, "axis", axis);
+                parentPropList->setRotate(std::stof(angle),
+                    toVector3f(parseCommaSeparated(axis))
+                );
+                break;
 
             default:
                 throw LeadException("Unknown property type found!");
@@ -145,6 +148,20 @@ public:
 
         // If it is a property, return a nullptr after it is done!
         return nullptr;
+    }
+
+    bool getAttr(const rapidxml::xml_node<> *node, std::string attrName, std::string &attrVal) const {
+        for(rapidxml::xml_attribute<> *attr = node->first_attribute(); attr; attr = attr->next_attribute()){
+            std::string attr_name(attr->name());
+            std::string attr_val(attr->value());
+
+            if (attr_name.compare(attrName) == 0){
+                attrVal = attr_val; 
+                return true;
+            }
+        }
+
+        return false;
     }
 
     Vector3f toVector3f(std::vector<std::string> values) const {

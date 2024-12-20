@@ -74,4 +74,10 @@ inline double degrees_to_radians(double degrees) {
 
 extern std::string indent(const std::string &string, int amount = 2);
 
+extern Eigen::Matrix4f createScaling(const Vector3f scale);
+
+extern Eigen::Matrix4f createTranslation(const Vector3f translate);
+
+extern Eigen::Matrix4f createRotation(const Vector3f axis, const float angle);
+
 LEAD_NAMESPACE_END

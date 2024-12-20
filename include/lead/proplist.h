@@ -17,8 +17,8 @@ public:
         LColor,
         LString,
         LScale,
-        LRotate,
         LTranslate,
+        LRotate,
         LUnkown
     };
 
@@ -52,7 +52,9 @@ public:
         return "Unknown PropertyType";
     }
 
-    PropertyList() {}
+    PropertyList() {
+        transformation = Eigen::Matrix4f::Identity();
+    }
 
     void setFloat(std::string key, float val)           { floats[key] = val; }
     void setInt(std::string key, int val)               { ints[key] = val; }
@@ -60,6 +62,9 @@ public:
     void setVector(std::string key, Vector3f val)       { vectors[key] = val; }
     void setColor(std::string key, Color3f val)         { colors[key] = val; }
     void setString(std::string key, std::string val)    { strings[key] = val; }
+    void setScale(Vector3f s)                           { setTransform(createScaling(s)); }             // Transformation does not need key
+    void setTranslate(Vector3f t)                       { setTransform(createTranslation(t)); }
+    void setRotate(float angle, Vector3f r)             { setTransform(createRotation(r, angle)); }
 
     float getFloat(std::string key, float def) const  {
         if(auto search = floats.find(key); search != floats.end())
@@ -91,6 +96,12 @@ public:
             return search->second;
         return def;
     }
+    Eigen::Matrix4f getTransform(Eigen::Matrix4f def) const {
+        if(transformation.isIdentity())
+            return def;
+        
+        return transformation;
+    }
 
     std::string toString() const {
         std::string final_str = "";
@@ -110,6 +121,11 @@ public:
         return final_str;
     }
 
+private:
+    void setTransform(Eigen::Matrix4f newPart) {
+        transformation = newPart * transformation;
+    }
+
 protected:
     std::map<std::string, float> floats;
     std::map<std::string, int> ints;
@@ -117,6 +133,8 @@ protected:
     std::map<std::string, Vector3f> vectors;
     std::map<std::string, Color3f> colors;
     std::map<std::string, std::string> strings;
+    Eigen::Matrix4f transformation;
+
 };
 
 

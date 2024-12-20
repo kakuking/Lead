@@ -23,5 +23,5 @@ public:
     }
 };
 
-LEAD_REGISTER_CLASS(NormalIntegrator, "normals")
+LEAD_REGISTER_CLASS(NormalIntegrator, "normal")
 LEAD_NAMESPACE_END
