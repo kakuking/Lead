@@ -16,6 +16,7 @@ set(LEAD_FILES
     include/lead/color.h
     include/lead/common.h
     include/lead/euclidean.h
+    include/lead/fileresolver.h
     include/lead/integrator.h
     include/lead/leadexception.h
     include/lead/object.h

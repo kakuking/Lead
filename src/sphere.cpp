@@ -99,15 +99,16 @@ public:
         v = psi/(M_PI);
     }
 
-    void setHitInformation(const Ray3f &ray, Intersection &its) const override {
+    void setHitInformation(const Ray3f &ray, Interaction &its) const override {
         float t, u, v;
 
         rayIntersect(ray, t, u, v);
 
         its.p = ray.at(t);
 
-        Normal3f n((m_invTransform*its.p - m_center).normalized());
+        Normal3f n((m_invTransform * its.p - m_center).normalized());
         Frame localFrame(n);
+        n = m_invTransform * n;
         
         its.n = n;
         its.t = t;

@@ -25,7 +25,7 @@ public:
         return false;
     }
 
-    bool rayIntersect(const Ray3f &ray, Intersection &its) const {
+    bool rayIntersect(const Ray3f &ray, Interaction &its) const {
         for(const Shape* shape: m_shapes) {
             float t, u, v;
             if(shape->rayIntersect(ray, t, u, v)) {

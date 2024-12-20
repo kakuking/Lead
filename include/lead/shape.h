@@ -7,23 +7,33 @@
 #include <lead/transform.h>
 
 LEAD_NAMESPACE_BEGIN
+
+struct MediumInterface {
+
+};
+
 // To pass information of intersection back and forth
-struct Intersection {
+struct Interaction {
     // Point of intersection
     Point3f p;
     // Normal at point of intersection (in global frame)
-    Vector3f n;
+    Normal3f n;
     // UV coordinates
     Point2f uv;
     // time of intersection
     float t;
+    // Outgoing direction
+    Vector3f wo;
     // Frame at point
     Frame geoFrame;
     Frame shFrame;
 
-    std::string toString() {
+    Medium *medium;
+    MediumInterface mediumInterface;
+
+    std::string toString() const {
         return tfm::format(
-            "Intersection:[\n"
+            "Interaction:[\n"
             "   p: %s\n"
             "   n: %s\n"
             "   uv: %s\n"
@@ -31,13 +41,16 @@ struct Intersection {
             p.toString(), n.toString(), uv.toString()
         );
     }
+
+    bool isSurfaceInteraction() const { return n != Normal3f(0.f, 0.f, 0.f); }
+    bool isMediumInteraction() const { return !isSurfaceInteraction(); }
 };
 
 class Shape: public LeadObject {
 public:
     virtual bool rayIntersect(const Ray3f &ray, float &t, float &u, float &v) const = 0;
 
-    virtual void setHitInformation(const Ray3f &ray, Intersection &its) const = 0;
+    virtual void setHitInformation(const Ray3f &ray, Interaction &its) const = 0;
 
     virtual ObjectType getClassType() const override { return LShape; }
 

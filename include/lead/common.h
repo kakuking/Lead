@@ -64,9 +64,28 @@ typedef TPoint<int, 2>          Point2i;
 typedef TPoint<int, 3>          Point3i;
 typedef TPoint<int, 4>          Point4i;
 
+class Block;
+class BoundingBox;
+class BSDF;
+class Camera;
+class Color3f;
+class Frame;
+class FileResolver;
+class Integrator;
+class LeadObject;
+class Parser;
+class Medium;
+class PropertyList;
+class Renderer;
+class Sampler;
 class Scene;
 class Shape;
-class Sampler;
+class Transform;
+
+struct Interaction;
+struct SurfaceInteraction;
+struct MediumInteraction;
+struct MediumInterface;
 
 inline double degrees_to_radians(double degrees) {
     return degrees * M_PI/180.0;
